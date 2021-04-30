@@ -1,0 +1,75 @@
+from tkinter import *
+import tkinter.font
+from gpiozero import LED
+import RPi.GPIO
+RPi.GPIO.setmode(RPi.GPIO.BCM)
+import time
+from tkinter import messagebox
+
+led = LED(14)
+
+
+
+Morsecode = { 'A':'.-', 'B':'-...',
+                    'C':'-.-.', 'D':'-..', 'E':'.',
+                    'F':'..-.', 'G':'--.', 'H':'....',
+                    'I':'..', 'J':'.---', 'K':'-.-',
+                    'L':'.-..', 'M':'--', 'N':'-.',
+                    'O':'---', 'P':'.--.', 'Q':'--.-',
+                    'R':'.-.', 'S':'...', 'T':'-',
+                    'U':'..-', 'V':'...-', 'W':'.--',
+                    'X':'-..-', 'Y':'-.--', 'Z':'--..',
+                    '1':'.----', '2':'..---', '3':'...--',
+                    '4':'....-', '5':'.....', '6':'-....',
+                    '7':'--...', '8':'---..', '9':'----.',
+                    '0':'-----', ', ':'--..--', '.':'.-.-.-',
+                    '?':'..--..', '/':'-..-.', '-':'-....-',
+                    '(':'-.--.', ')':'-.--.-'}
+
+
+
+win = Tk()
+
+win.title("Morse Code using GUI")
+myFont = tkinter.font.Font(family =  'Helvetica', size = 12, weight = "bold")
+
+userinput = Entry(win, width = 50)
+userinput.grid(row=0, column =0)
+def dot():   #Function for dot to set time
+    led.on()
+    time.sleep(0.20)
+    led.off()
+    time.sleep(0.20)
+
+def dash():  ##Function for dash to set time
+    led.on()
+    time.sleep(0.50)
+    led.off()
+    time.sleep(0.50)
+
+def error():
+    messagebox.showerror("Error", "Enter maximum of 12 characters")
+    
+    
+def to_morse():   #Checking symbols and accordingly calling the dot and dash functions
+    input = userinput.get()
+    if len(input) > 12:
+        error()
+    else:
+        for letter in input:
+            for symbol in Morsecode[letter.upper()]:
+                if symbol == "-":
+                    dash()
+                if symbol == ".":
+                    dot()
+
+
+                
+button = Button(win, text = 'Convert', font = myFont, command = to_morse, bg = 'bisque2', height = 1, width = 24)
+button.grid(row = 1, column = 0)
+
+
+
+
+    
+    
